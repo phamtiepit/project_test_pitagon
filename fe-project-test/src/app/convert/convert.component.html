@@ -1,38 +1,46 @@
-<div class="col-md-6">
-  <form (submit)="onSubmit(formConvert);" #formConvert="ngForm">
-    <div class="form-group">
-      <label for="convertType">Chọn kiểu dữ liệu cần Convert sang Base64</label>
-      <select class="form-control"  id="convertType" (ngModelChange)="onChange($event)"
-        ngModel name="convertType" required>
-        <option value="" selected>---Chọn---</option>
-        <option value="stringtobase64">String --> Base64</option>
-        <option value="base64tostring">Base64 --> String</option>
-        <option value="imagetobase64" >Image --> Base64</option>
-        <option value="base64toimage">Base64 --> Image</option>
-      </select>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <form  (submit)="onSubmit(formConvert);" #formConvert="ngForm">
+        <div class="form-group">
+          <label for="convertType">Chọn kiểu dữ liệu cần Convert sang Base64</label>
+          <select class="form-control"  id="convertType" (ngModelChange)="onSelectChange($event)"
+            ngModel name="convertType" required>
+            <option value="" selected>---Chọn---</option>
+            <option value="stringtobase64">String --> Base64</option>
+            <option value="base64tostring">Base64 --> String</option>
+            <option value="imagetobase64" >Image --> Base64</option>
+            <option value="base64toimage">Base64 --> Image</option>
+          </select>
 
+        </div>
+        <div *ngIf="!isShow">
+          <div class="form-group">
+            <label for="inputString">Dữ liệu vào</label>
+            <input type="text" class="form-control" id="inputString" ngModel
+                  name="inputString" required>
+          </div>
+          <div class="form-group">
+            <label for="result">Kết quả:</label>
+            <textarea class="form-control" name="result" id="result" cols="30" rows="10">{{result}}</textarea>
+          </div>
+        </div>
+        <div *ngIf="isShow">
+          <div class="form-group">
+            <label for="image">Chọn hình ảnh:</label>
+            <input type="file" name="image" id="image" ngModel (change)="onFileChange($event)" class="form-control">
+          </div>
+
+          <img [src]="imageSrc" *ngIf="imageSrc" style="height: 150px; width:200px">
+          <p></p>
+          <div class="form-group">
+            <label for="result">Kết quả:</label>
+            <textarea class="form-control" name="resultImage" id="resultImage" cols="30" rows="5"></textarea>
+          </div>
+        </div>
+        <button class="btn btn-primary">Chuyển đổi</button>
+      </form>
     </div>
-    <div *ngIf="!isShow">
-      <div class="form-group">
-        <label for="inputString">Dữ liệu vào</label>
-        <input type="text" class="form-control" id="inputString" ngModel
-              name="inputString" required>
-      </div>
-      <div class="form-group">
-        <label for="result">Kết quả:</label>
-        <textarea class="form-control" name="result" id="result" cols="30" rows="10">{{result}}</textarea>
-      </div>
-    </div>
-    <div *ngIf="isShow">
-      <div class="form-group">
-        <label for="image">Chọn hình ảnh:</label>
-        <input type="file" name="image" id="image" ngModel class="form-control">
-      </div>
-      <div class="form-group">
-        <label for="result">Kết quả:</label>
-        <textarea class="form-control" name="resultImage" id="resultImage" cols="30" rows="5"></textarea>
-      </div>
-    </div>
-    <button class="btn btn-primary">Chuyển đổi</button>
-  </form>
+  </div>
 </div>
+
