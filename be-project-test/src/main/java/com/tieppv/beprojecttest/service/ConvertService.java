@@ -18,9 +18,16 @@ public class ConvertService {
 		return gson.toJson(convertedString);
 	}
 	public String decodeString(String input) {
-		byte[] decodedBytes = Base64.getDecoder().decode(input);
+		String stringConverted = "";
+	
+		try {
+			byte[] decodedBytes = Base64.getDecoder().decode(input);
+			stringConverted = new String(decodedBytes);
+		}catch(IllegalArgumentException iae){
+			stringConverted = "invalid";
+		}
 		Gson gson= new GsonBuilder().create();
-		return gson.toJson(new String(decodedBytes));
+		return gson.toJson(stringConverted);
 	}
 	
 	public String encodeImageToBase64(MultipartFile file) {

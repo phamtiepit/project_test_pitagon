@@ -1,57 +1,125 @@
 <div class="container">
   <div class="row">
     <div class="col-md-12">
-      <form  (submit)="onSubmit(formConvert);" #formConvert="ngForm">
+      <form (submit)="onSubmit(formConvert)" #formConvert="ngForm">
         <div class="form-group">
-          <label for="convertType">Chọn kiểu dữ liệu cần Convert sang Base64</label>
-          <select class="form-control"  id="convertType" (ngModelChange)="onSelectChange($event)"
-            ngModel name="convertType" required>
+          <label for="convertType"
+            >Chọn kiểu dữ liệu cần Convert sang Base64</label
+          >
+          <select
+            class="form-control"
+            id="convertType"
+            (ngModelChange)="onSelectChange($event)"
+            ngModel
+            #selectType="ngModel"
+            name="convertType"
+            required
+          >
             <option value="" selected>---Chọn---</option>
             <option value="stringtobase64">String --> Base64</option>
             <option value="base64tostring">Base64 --> String</option>
-            <option value="imagetobase64" >Image --> Base64</option>
+            <option value="imagetobase64">Image --> Base64</option>
             <option value="base64toimage">Base64 --> Image</option>
           </select>
-
+          <span class="text-danger" *ngIf="selectType.touched && selectType.errors?.required">
+            *Trường này không được để trống</span>
         </div>
         <div *ngIf="!isShow && !isShowImage">
           <div class="form-group">
             <label for="inputString">Dữ liệu vào</label>
-            <input type="text" class="form-control" id="inputString" ngModel
-                  name="inputString" required>
+            <input
+              type="text"
+              class="form-control"
+              id="inputString"
+              ngModel
+              #txtInputString="ngModel"
+              name="inputString"
+              required
+            />
+            <span class="text-danger" *ngIf="txtInputString.touched && txtInputString.errors?.required">
+              *Trường này không được để trống</span
+            >
+            <span class="text-danger" *ngIf="isBase64">{{isBase64}}</span>
           </div>
           <div class="form-group">
             <label for="result">Kết quả:</label>
-            <textarea class="form-control" name="result" id="result" cols="30" rows="10">{{result}}</textarea>
+            <textarea
+              class="form-control"
+              name="result"
+              id="result"
+              cols="30"
+              rows="10"
+              >{{ result }}</textarea
+            >
           </div>
         </div>
         <div *ngIf="isShow && !isShowImage">
           <div class="form-group">
             <label for="image">Chọn hình ảnh:</label>
-            <input type="file" name="image" id="image" ngModel (change)="onFileChange($event)" class="form-control">
+            <input
+              type="file"
+              name="image"
+              id="image"
+              ngModel
+              (change)="onFileChange($event)"
+              class="form-control"
+              required
+              #imageFile="ngModel"
+            />
+            <span class="text-danger" *ngIf="imageFile.touched && imageFile.errors?.required">
+              *Trường này không được để trống</span
+            >
           </div>
 
-          <img [src]="imageSrc" *ngIf="imageSrc" style="height: 150px; width:200px">
+          <img
+            [src]="imageSrc"
+            *ngIf="imageSrc"
+            style="height: 150px; width: 200px"
+          />
           <p></p>
           <div class="form-group">
             <label for="resultImageString">Kết quả:</label>
-            <textarea class="form-control" name="resultImageString" id="resultImageString" cols="30" rows="15">{{resultImageString}}</textarea>
+            <textarea
+              class="form-control"
+              name="resultImageString"
+              id="resultImageString"
+              cols="30"
+              rows="15"
+              >{{ resultImageString }}</textarea
+            >
           </div>
         </div>
         <div *ngIf="isShowImage && !isShow">
           <div class="form-group">
             <label for="base64String">Nhập chuỗi hình ảnh Base64: </label>
-            <textarea class="form-control" name="base64String" id="base64String" cols="30" rows="15" ngModel></textarea>
+            <textarea
+              class="form-control"
+              name="base64String"
+              id="base64String"
+              cols="30"
+              rows="15"
+              ngModel
+              #txtBase64String="ngModel"
+              required
+            ></textarea>
+            <span class="text-danger" *ngIf="txtBase64String.touched && txtBase64String.errors?.required">
+              *Trường này không được để trống</span
+            >
           </div>
           <div class="form-group">
             <label for="imageResult">Hình ảnh:</label>
-            <img [src]="'data:image/jpg;base64,'+imageString" *ngIf="imageString" style="height: 150px; width:200px">
+            <img
+              [src]="'data:image/jpg;base64,' + imageString"
+              *ngIf="imageString"
+              style="height: 150px; width: 200px"
+            />
           </div>
           <p></p>
         </div>
-        <button class="btn btn-primary">Chuyển đổi</button>
+        <button class="btn btn-success" [disabled]="formConvert.invalid">
+          Chuyển đổi
+        </button>
       </form>
     </div>
   </div>
 </div>
-

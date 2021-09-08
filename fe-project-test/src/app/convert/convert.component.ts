@@ -7,6 +7,7 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./convert.component.css'],
 })
 export class ConvertComponent implements OnInit {
+  isBase64: string = '';
   isShow = false;
   isShowImage = false;
   result: string = '';
@@ -37,7 +38,12 @@ export class ConvertComponent implements OnInit {
     const url = 'http://localhost:8080/api/convert';
     this.http.post(url, formConvert.value).subscribe((response) => {
       //console.log(response);
-      this.result = JSON.stringify(response);
+      if(response =='invalid') {
+        this.isBase64 = 'Base64 String Invalid';
+      }else{
+        this.result = JSON.stringify(response);
+        this.isBase64 = '';
+      }
     });
   }
 
