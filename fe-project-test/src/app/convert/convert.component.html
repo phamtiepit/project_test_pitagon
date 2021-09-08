@@ -14,7 +14,7 @@
           </select>
 
         </div>
-        <div *ngIf="!isShow">
+        <div *ngIf="!isShow && !isShowImage">
           <div class="form-group">
             <label for="inputString">Dữ liệu vào</label>
             <input type="text" class="form-control" id="inputString" ngModel
@@ -25,7 +25,7 @@
             <textarea class="form-control" name="result" id="result" cols="30" rows="10">{{result}}</textarea>
           </div>
         </div>
-        <div *ngIf="isShow">
+        <div *ngIf="isShow && !isShowImage">
           <div class="form-group">
             <label for="image">Chọn hình ảnh:</label>
             <input type="file" name="image" id="image" ngModel (change)="onFileChange($event)" class="form-control">
@@ -34,9 +34,20 @@
           <img [src]="imageSrc" *ngIf="imageSrc" style="height: 150px; width:200px">
           <p></p>
           <div class="form-group">
-            <label for="result">Kết quả:</label>
-            <textarea class="form-control" name="resultImage" id="resultImage" cols="30" rows="5"></textarea>
+            <label for="resultImageString">Kết quả:</label>
+            <textarea class="form-control" name="resultImageString" id="resultImageString" cols="30" rows="15">{{resultImageString}}</textarea>
           </div>
+        </div>
+        <div *ngIf="isShowImage && !isShow">
+          <div class="form-group">
+            <label for="base64String">Nhập chuỗi hình ảnh Base64: </label>
+            <textarea class="form-control" name="base64String" id="base64String" cols="30" rows="15" ngModel></textarea>
+          </div>
+          <div class="form-group">
+            <label for="imageResult">Hình ảnh:</label>
+            <img [src]="'data:image/jpg;base64,'+imageString" *ngIf="imageString" style="height: 150px; width:200px">
+          </div>
+          <p></p>
         </div>
         <button class="btn btn-primary">Chuyển đổi</button>
       </form>

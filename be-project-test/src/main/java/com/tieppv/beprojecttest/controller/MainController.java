@@ -49,10 +49,8 @@ public class MainController {
 	
 	@PostMapping(path = "/convert/image")
 	@ResponseBody
-	public String encodeImage(@RequestParam("image") MultipartFile image) {
+	public String encodeImage(@RequestParam("imageFile") MultipartFile imageFile) {
 		
-		System.out.print(image);
-		
-		return null;
+		return convertService.encodeImageToBase64(imageFile);
 	}
 }

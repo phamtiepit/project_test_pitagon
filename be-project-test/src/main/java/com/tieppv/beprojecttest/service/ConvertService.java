@@ -1,5 +1,6 @@
 package com.tieppv.beprojecttest.service;
 
+import java.io.IOException;
 import java.util.Base64;
 
 import org.springframework.stereotype.Service;
@@ -24,9 +25,12 @@ public class ConvertService {
 	
 	public String encodeImageToBase64(MultipartFile file) {
 		String base64Image = "";
-		
-			
-		
-		return base64Image;
+		try {
+			base64Image = Base64.getEncoder().encodeToString(file.getBytes());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		Gson gson= new GsonBuilder().create();
+		return gson.toJson(new String(base64Image));
 	}
 }
