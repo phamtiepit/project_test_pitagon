@@ -40,4 +40,8 @@ public class ConvertService {
 		Gson gson= new GsonBuilder().create();
 		return gson.toJson(new String(base64Image));
 	}
+	public String getImageFromBase64(String base64String){
+		Gson gson= new GsonBuilder().create();
+		return gson.toJson(new String(base64String));
+	}
 }

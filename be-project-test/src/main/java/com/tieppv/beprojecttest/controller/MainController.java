@@ -18,39 +18,40 @@ import com.tieppv.beprojecttest.service.ConvertService;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping(path = "/api")
+@RequestMapping(path = "/api/convert")
 public class MainController {
 
 	@Autowired
 	ConvertService convertService;
 	
 	
-	@PostMapping(path = "/convert")
+	@PostMapping(path = "/encodeString")
 	@ResponseBody
-	public String convertToBase64(@RequestBody Map<String, String> request) {
-		String result = "";
+	public String convertStringToBase64(@RequestBody Map<String, String> request) {
 		String inputString = request.get("inputString").replace("\"", "");
-		String convertType =  request.get("convertType");
-			
-		switch(convertType) {
-		  case "stringtobase64":
-			  result = convertService.encodeString(inputString);
-		    break;
-		    
-		  case "base64tostring":
-			  result = convertService.decodeString(inputString);
-		    break;
-		}
+		return convertService.encodeString(inputString);
 		//System.out.print(inputString);
-		return result;
+	}
+
+	@PostMapping(path = "/decodeString")
+	@ResponseBody
+	public String convertBase64ToString(@RequestBody Map<String, String> request) {
+		String inputString = request.get("inputString").replace("\"", "");
+		return convertService.decodeString(inputString);
+		//System.out.print(inputString);
 	}
 	
 	
-	
-	@PostMapping(path = "/convert/image")
+	@PostMapping(path = "/endcodeImage")
 	@ResponseBody
 	public String encodeImage(@RequestParam("imageFile") MultipartFile imageFile) {
-		
 		return convertService.encodeImageToBase64(imageFile);
+	}
+
+	@PostMapping(path = "/getImage")
+	@ResponseBody
+	public String getImage(@RequestBody Map<String, String> request) {
+		String base64String = request.get("base64String").replace("\"", "");
+		return convertService.getImageFromBase64(base64String);
 	}
 }

@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {ConvertService} from './convert.service';
+
 
 @Component({
   selector: 'app-convert',
   templateUrl: './convert.component.html',
   styleUrls: ['./convert.component.css'],
+  providers: [ConvertService],
 })
 export class ConvertComponent implements OnInit {
   isBase64: string = '';
@@ -16,35 +18,27 @@ export class ConvertComponent implements OnInit {
   imageString: string = '';
   selectedFile!: File;
 
-  constructor(private http: HttpClient) { }
+  constructor(private convertService: ConvertService) { }
 
   ngOnInit(): void { }
 
   //Submit Form Data
   onSubmit(formConvert: any) {
     //console.log(formConvert);
-    if (formConvert.value.convertType === 'imagetobase64') {
-      this.uploadImage();
-    }else if(formConvert.value.convertType === 'base64toimage'){
-      this.showImage(formConvert.value.base64String);
-    }else{
-      this.sendToServer(formConvert);
+    switch (formConvert.value.convertType) {
+      case 'stringtobase64':
+        this.encodeString(formConvert);
+        break;
+      case 'base64tostring':
+        this.decodeString(formConvert);
+        break;
+      case 'imagetobase64':
+        this.encodeImage();
+        break;
+      case 'base64toimage':
+        this.getImage(formConvert);
+        break;
     }
-  }
-
-
-  //Send data to REST API
-  sendToServer(formConvert: any) {
-    const url = 'http://localhost:8080/api/convert';
-    this.http.post(url, formConvert.value).subscribe((response) => {
-      //console.log(response);
-      if(response =='invalid') {
-        this.isBase64 = 'Base64 String Invalid';
-      }else{
-        this.result = JSON.stringify(response);
-        this.isBase64 = '';
-      }
-    });
   }
 
   //Event Select Listener
@@ -60,7 +54,6 @@ export class ConvertComponent implements OnInit {
       this.isShowImage = false;
     }
   }
-
   //Event File Change
   onFileChange(event: any) {
     //console.log(event);
@@ -76,12 +69,28 @@ export class ConvertComponent implements OnInit {
     }
   }
 
-  // Upload File with API
-  uploadImage() {
+  encodeString(formConvert: any) {
+    this.convertService.sendPostStringEncode(formConvert.value).subscribe((response) => {
+          //console.log(response);
+          this.result = JSON.stringify(response);
+        });
+  }
+  decodeString(formConvert: any) {
+    this.convertService.sendPostStringDecode(formConvert.value).subscribe((response) => {
+      //console.log(response);
+      if(response =='invalid') {
+        this.isBase64 = 'Base64 String Invalid';
+      }else{
+        this.result = JSON.stringify(response);
+        this.isBase64 = '';
+      }
+    });
+  }
+  encodeImage() {
     //console.log(this.selectedFile);
     const uploadImageData = new FormData();
     uploadImageData.append('imageFile', this.selectedFile, this.selectedFile.name);
-    this.http.post('http://localhost:8080/api/convert/image', uploadImageData, { observe: 'response' })
+    this.convertService.sendPostImage(uploadImageData)
       .subscribe((response:any) => {
         if (response.status === 200) {
           //console.log(response.body);
@@ -94,7 +103,11 @@ export class ConvertComponent implements OnInit {
       );
   }
   //Get Image From Base64 String
-  showImage(imgString: any) {
-    this.imageString = imgString.replace(/^"(.*)"$/, '$1');
+  getImage(formConvert: any) {
+    //console.log(formConvert);
+    this.convertService.getImageString(formConvert.value).subscribe((response) => {
+      //console.log(response);
+      this.imageString = JSON.stringify(response).replace(/^"(.*)"$/, '$1');
+    });
   }
 }
