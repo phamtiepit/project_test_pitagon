@@ -2,7 +2,6 @@ package com.tieppv.beprojecttest.service;
 
 import java.io.IOException;
 import java.util.Base64;
-
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -42,6 +41,9 @@ public class ConvertService {
 	}
 	public String getImageFromBase64(String base64String){
 		Gson gson= new GsonBuilder().create();
-		return gson.toJson(new String(base64String));
+		if(org.apache.tomcat.util.codec.binary.Base64.isBase64(base64String)){
+			return gson.toJson(new String("data:image/jpg;base64,"+base64String));
+		}
+		return gson.toJson(new String("invalid"));
 	}
 }

@@ -107,7 +107,12 @@ export class ConvertComponent implements OnInit {
     //console.log(formConvert);
     this.convertService.getImageString(formConvert.value).subscribe((response) => {
       //console.log(response);
-      this.imageString = JSON.stringify(response).replace(/^"(.*)"$/, '$1');
+      if(response =='invalid') {
+        this.imageString = 'assets/invalid.jpg';
+      }else{
+        this.imageString = JSON.stringify(response).replace(/^"(.*)"$/, '$1');
+      }
+
     });
   }
 }
