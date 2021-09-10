@@ -72,7 +72,7 @@ export class ConvertComponent implements OnInit {
   encodeString(formConvert: any) {
     this.convertService.sendPostStringEncode(formConvert.value).subscribe((response) => {
           //console.log(response);
-          this.result = JSON.stringify(response);
+          this.result = JSON.stringify(response).replace(/^"(.*)"$/, '$1');
         });
   }
   decodeString(formConvert: any) {
@@ -81,7 +81,7 @@ export class ConvertComponent implements OnInit {
       if(response =='invalid') {
         this.isBase64 = 'Base64 String Invalid';
       }else{
-        this.result = JSON.stringify(response);
+        this.result = JSON.stringify(response).replace(/^"(.*)"$/, '$1');
         this.isBase64 = '';
       }
     });
@@ -95,7 +95,7 @@ export class ConvertComponent implements OnInit {
         if (response.status === 200) {
           //console.log(response.body);
           console.log('Image uploaded successfully');
-          this.resultImageString = JSON.stringify(response.body);
+          this.resultImageString = JSON.stringify(response.body).replace(/^"(.*)"$/, '$1');
         } else {
           console.log('Image uploaded error');
         }
