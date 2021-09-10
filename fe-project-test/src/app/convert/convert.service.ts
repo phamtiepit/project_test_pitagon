@@ -1,23 +1,24 @@
 import {Injectable} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 @Injectable()
 
 export class ConvertService{
-  baseUrl : string = 'http://localhost:8080/api/convert/';
+
 
   constructor(private http: HttpClient){}
 
   sendPostStringEncode(value:any){
-    return this.http.post(this.baseUrl+'encodeString', value);
+    return this.http.post(environment.apiUrl+'encodeString', value);
   }
   sendPostStringDecode(value:any){
-    return this.http.post(this.baseUrl+'decodeString', value);
+    return this.http.post(environment.apiUrl+'decodeString', value);
   }
   sendPostImage(value:any){
-    return this.http.post(this.baseUrl+'endcodeImage', value, { observe: 'response' });
+    return this.http.post(environment.apiUrl+'endcodeImage', value, { observe: 'response' });
   }
   getImageString(value:any){
-    return this.http.post(this.baseUrl+'getImage', value);
+    return this.http.post(environment.apiUrl+'getImage', value);
   }
 
 }
